@@ -1,0 +1,37 @@
+#include <vector>
+#include <algorithm>
+
+class Solution {
+public:
+    void nextPermutation(std::vector<int>& nums) {
+        int n = nums.size();
+        if (n == 0) return; // Check for empty array
+        
+        int ind = -1;
+
+        // Step 1: Find the first index 'ind' from the end where nums[ind] < nums[ind + 1]
+        for (int i = n - 2; i >= 0; i--) {
+            if (nums[i] < nums[i + 1]) {
+                ind = i;
+                break;
+            }
+        }
+
+        // Step 2: If no such index is found, reverse the array to get the smallest permutation
+        if (ind == -1) {
+            std::reverse(nums.begin(), nums.end());
+            return;
+        }
+
+        // Step 3: Find the smallest number greater than nums[ind] to the right of 'ind'
+        for (int i = n - 1; i > ind; i--) {
+            if (nums[i] > nums[ind]) {
+                std::swap(nums[i], nums[ind]);
+                break;
+            }
+        }
+
+        // Step 4: Reverse the part of the array from 'ind + 1' to the end
+        std::reverse(nums.begin() + ind + 1, nums.end());
+    }
+};
