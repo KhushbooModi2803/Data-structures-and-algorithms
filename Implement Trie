@@ -1,0 +1,99 @@
+#include <vector>
+using namespace std;
+
+class trinode {
+public:
+    char data;
+    trinode* children[26];
+    bool isterminal;
+
+    trinode(char ch) {
+        data = ch;
+        for (int i = 0; i < 26; i++) {
+            children[i] = NULL;
+        }
+        isterminal = false;
+    }
+};
+
+class Trie {
+public:
+    trinode* root;
+
+    // constructor
+    Trie() {
+        root = new trinode('\0');
+    }
+
+    void insertutil(trinode* root, string word) {
+        // base case
+        if (word.length() == 0) {
+            root->isterminal = true;
+            return; // return immediately after marking terminal
+        }
+        int index = word[0] - 'a';
+        trinode* child;
+        // present
+        if (root->children[index] != NULL) {
+            child = root->children[index];
+        } else {
+            // absent
+            child = new trinode(word[0]);
+            root->children[index] = child;
+        }
+        // recursive call
+        insertutil(child, word.substr(1));
+    }
+
+    // insertion function
+    void insert(string word) {
+        insertutil(root, word);
+    }
+
+    /** Returns if the word is in the trie. */
+    bool searchutil(trinode* root, string word) {
+        if (word.length() == 0) {
+            return root->isterminal; // Check if it's a terminal node for a valid word
+        }
+        int index = word[0] - 'a';
+        trinode* child;
+        // present
+        if (root->children[index] != NULL) {
+            child = root->children[index];
+        } else {
+            // absent
+            return false;
+        }
+        // recursive call
+        return searchutil(child, word.substr(1));
+    }
+
+    bool search(string word) {
+        return searchutil(root, word);
+    }
+
+    // prefix
+    bool prefixutil(trinode* root, string prefix) {
+        if (prefix.length() == 0) {
+            return true;
+        }
+        int index = prefix[0] - 'a';
+        trinode* child;
+        // present
+        if (root->children[index] != NULL) {
+            child = root->children[index];
+        } else {
+            // absent
+            return false;
+        }
+        // recursive call
+        return prefixutil(child, prefix.substr(1));
+    }
+
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        return prefixutil(root, prefix);
+    }
+};
+
+
