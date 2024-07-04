@@ -1,0 +1,31 @@
+Node* removeKthNode(Node* head, int K)
+{
+      Node* fast = head;
+        Node* slow = head;
+        
+        // Move fast n steps ahead
+        for(int i = 0; i < K; i++) {
+            fast = fast->next;
+        }
+        
+        // If fast is NULL, n is the length of the list, so we need to remove the head
+        if (fast == nullptr) {
+            Node* newHead = head->next;
+            delete head;
+            return newHead;
+        }
+        
+        // Move fast to the end, maintaining the gap
+        while(fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+        
+        // Remove the Kth node from end
+        Node* delNode = slow->next;
+        slow->next = slow->next->next;
+        delete delNode;
+        
+        return head;
+    
+}
