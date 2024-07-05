@@ -1,0 +1,43 @@
+#include <string>
+using namespace std;
+
+class Node {
+public:
+    string data;
+    Node* next;
+    Node* back;
+    Node(): data(""), next(nullptr), back(nullptr) {}
+    Node(string x): data(x), next(nullptr), back(nullptr) {}
+    Node(string x, Node* next, Node* back): data(x), next(next), back(back) {}
+};
+
+class BrowserHistory {
+    Node* currentpage;
+public:
+    BrowserHistory(string homepage) {
+        currentpage = new Node(homepage);
+    }
+    
+    void visit(string url) {
+        Node* newnode = new Node(url);
+        currentpage->next = newnode;
+        newnode->back = currentpage;
+        currentpage = newnode;
+    }
+    
+    string back(int steps) {
+        while (steps > 0 && currentpage->back != nullptr) {
+            currentpage = currentpage->back;
+            steps--;
+        }
+        return currentpage->data;
+    }
+    
+    string forward(int steps) {
+        while (steps > 0 && currentpage->next != nullptr) {
+            currentpage = currentpage->next;
+            steps--;
+        }
+        return currentpage->data;
+    }
+};
