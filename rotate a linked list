@@ -1,0 +1,30 @@
+class Solution {
+public:
+    ListNode* findNthNode(ListNode* temp,int k){
+        int cnt=1;
+        while(temp!=NULL){
+            if(cnt==k) return temp;
+            cnt++;
+            temp=temp->next;
+        }
+        return temp;
+    }
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(head==NULL || k==0) return head;
+        int len=1;
+        ListNode* tail=head;
+        while(tail->next!=NULL){
+            tail=tail->next;
+            len++;
+        }
+            if(k%len==0) return head;
+            k=k%len;
+            tail->next=head;
+            ListNode* newtailnode=findNthNode(head,len-k);
+            head=newtailnode->next;
+            newtailnode->next=NULL;
+        
+        return head;
+    }
+    
+};
