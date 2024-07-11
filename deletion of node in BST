@@ -1,0 +1,50 @@
+BinaryTreeNode<int>* findLastNode(BinaryTreeNode<int>* root) {
+    if (root->right == NULL) {
+        return root;
+    }
+    return findLastNode(root->right);  // Corrected to traverse the right subtree
+}
+
+BinaryTreeNode<int>* helper(BinaryTreeNode<int>* root) {
+    if (root->left == NULL) {
+        return root->right;
+    }
+    if (root->right == NULL) {
+        return root->left;
+    }
+    BinaryTreeNode<int>* rightChild = root->right;
+    BinaryTreeNode<int>* lastNode = findLastNode(root->left);
+    lastNode->right = rightChild;
+    return root->left;
+}
+
+BinaryTreeNode<int>* deleteNode(BinaryTreeNode<int>* root, int key) {
+    if (root == NULL) {
+        return root;
+    }
+    if (root->data == key) {
+        return helper(root);
+    }
+    BinaryTreeNode<int>* dummy = root;
+    while (root != NULL) {
+        if (root->data > key) {
+            if (root->left != NULL && root->left->data == key) {
+                root->left = helper(root->left);
+                break;
+            }
+            else {
+                root = root->left;
+            }
+        }
+        else {
+            if (root->right != NULL && root->right->data == key) {  // Corrected to check right subtree
+                root->right = helper(root->right);
+                break;
+            }
+            else {
+                root = root->right;
+            }
+        }
+    }
+    return dummy;
+}
