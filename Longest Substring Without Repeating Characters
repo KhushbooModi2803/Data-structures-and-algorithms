@@ -1,0 +1,17 @@
+#include <bits/stdc++.h> 
+int uniqueSubstrings(string input)
+{
+    unordered_map<char, int> hash;
+        int left = 0, right = 0, maxlen = 0;
+        int n = input.size();
+        
+        while (right < n) {
+            if (hash.find(input[right]) != hash.end()) {
+                left = max(hash[input[right]] + 1, left);
+            }
+            hash[input[right]] = right;
+            maxlen = max(maxlen, right - left + 1);
+            right++;
+        }
+        return maxlen;
+}
