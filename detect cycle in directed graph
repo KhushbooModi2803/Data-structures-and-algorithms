@@ -1,0 +1,45 @@
+// int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+//   // Write your code here.
+// }
+#include <vector>
+
+using namespace std;
+
+bool dfs(int node, vector<vector<int>>& adj, vector<int>& visited, vector<int>& recStack) {
+    if (recStack[node]) 
+        return true;  // If the node is already in the recursion stack, a cycle is detected.
+    if (visited[node]) 
+        return false; // If the node is already visited and not in the recursion stack, no cycle is detected here.
+    
+    visited[node] = true;
+    recStack[node] = true;
+    
+    for (int neighbor : adj[node]) {
+        if (dfs(neighbor, adj, visited, recStack)) {
+            return true;
+        }
+    }
+    
+    recStack[node] = false; // Remove the node from recursion stack before backtracking.
+    return false;
+}
+
+bool detectCycleInDirectedGraph(int n, vector<pair<int, int>>& edges) {
+    vector<vector<int>> adj(n + 1);  // Adjacency list
+    vector<int> visited(n + 1, false);
+    vector<int> recStack(n + 1, false);
+    
+    for (auto edge : edges) {
+        adj[edge.first].push_back(edge.second);
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        if (!visited[i]) {
+            if (dfs(i, adj, visited, recStack)) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}
